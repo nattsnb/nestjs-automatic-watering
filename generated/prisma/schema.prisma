@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Data {
+  id        Int      @id @default(autoincrement())
+  value     Float
+  createdAt DateTime @default(now())
+  sensor    Sensor   @relation(fields: [sensorId], references: [id])
+  sensorId  Int
+}
+
+model Sensor {
+  id   Int        @id @default(autoincrement())
+  name String
+  type SensorType
+  data Data[]
+}
+
+enum SensorType {
+  HUMIDITY
+  TEMPERATURE
+}
